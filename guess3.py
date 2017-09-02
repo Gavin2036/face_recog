@@ -1,3 +1,4 @@
+#coding=utf8
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
@@ -71,24 +72,21 @@ def classify(sess, label_list, softmax_output, coder, images, image_file):
     return best_choice
 
 
+#调用guessGender前要先初始化
+# tf.reset_default_graph()
+label_list = GENDER_LIST
+nlabels = len(label_list)
+
+print('Executing on %s' % FLAGS.device_id)
+model_fn = select_model(FLAGS.model_type)
+images = tf.placeholder(tf.float32, [None, RESIZE_FINAL, RESIZE_FINAL, 3])
+logits = model_fn(nlabels, images, 1, False)
 
 
 def guessGender(file):  # pylint: disable=unused-argument
 
-
     with tf.Session() as sess:
-
-        # tf.reset_default_graph()
-        label_list = GENDER_LIST
-        nlabels = len(label_list)
-
-        print('Executing on %s' % FLAGS.device_id)
-        model_fn = select_model(FLAGS.model_type)
-
         with tf.device(FLAGS.device_id):
-
-            images = tf.placeholder(tf.float32, [None, RESIZE_FINAL, RESIZE_FINAL, 3])
-            logits = model_fn(nlabels, images, 1, False)
             init = tf.global_variables_initializer()
 
             requested_step = FLAGS.requested_step if FLAGS.requested_step else None
