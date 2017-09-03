@@ -2,7 +2,7 @@
 import itchat, time, threading
 import gender_guess
 
-itchat.auto_login()
+itchat.auto_login(hotReload=True)
 
 Gender_Flag = False
 
@@ -21,7 +21,7 @@ def download_files(msg):
     msg['Text'](fileDir)
     gender_result = gender_guess.guessGender(fileDir)
     itchat.send('%s received'%msg['Type'], toUserName='filehelper')
-    itchat.send('%s'%gender_result[0], toUserName='filehelper')
+    itchat.send('%s'%gender_result[0], toUserName=msg['FromUserName'])
 
 @itchat.msg_register('Text')
 def text_reply(msg):
